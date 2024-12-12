@@ -9,4 +9,6 @@ urlpatterns = [
     path("todos/<int:pk>/complete/", views.TodoCompleteView.as_view(), name="todo_complete"),
     path('signup/', views.signup),
     path('login/', views.login),
+
+    path('room', views.RoomView.as_view()),
 ]

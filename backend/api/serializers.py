@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from music_controller.models import Room
 from todo.models import Todo
 
 
@@ -18,6 +19,11 @@ class TodoCompletedSerializer(serializers.ModelSerializer):
         fields = ["id"]
         read_only_fields = ['title', 'detail', 'completed', 'create_time', 'update_time']
 
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('id', 'code', 'host', 'guest_can_pause',
+                  'votes_to_skip', 'created_at')
 
 
 

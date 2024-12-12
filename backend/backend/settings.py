@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'todo',
     'api',
     "mauth",
+    'music_controller',
 ]
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

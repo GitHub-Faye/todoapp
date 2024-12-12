@@ -2,12 +2,17 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import generics,permissions
-from .serializers import TodoCompletedSerializer, TodoSerializer
-from todo.models import Todo
 from rest_framework.parsers import JSONParser
+from rest_framework.authtoken.models import Token
+
+from .serializers import RoomSerializer, TodoCompletedSerializer, TodoSerializer
+
+from todo.models import Todo
+from music_controller.models import Room
+
+
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.authtoken.models import Token
 from django.http import JsonResponse
 from django.db import IntegrityError
 
@@ -56,6 +61,11 @@ class TodoCompleteView(generics.UpdateAPIView):
     def perform_update(self, serializer):
         serializer.instance.completed = not serializer.instance.completed
         serializer.save()
+
+
+class RoomView(generics.ListAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
 
 
 @csrf_exempt
