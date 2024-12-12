@@ -19,6 +19,8 @@ import { BrowserRouter, Routes, Route,Router } from 'react-router-dom';
 import TodoDataService from './services/todos';
 
 function App() {
+  //useState is a React Hook that lets you add a state variable to your component.
+  //The set function that lets you update the state and trigger a re-render
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [error, setError] = useState('');

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 
 import moment from 'moment';
-
+//通过{}包住需要接受的参数 解构了 props
 const TodosList = ({ token }) => {
     const [todos, setTodos] = useState([]);
 
@@ -72,7 +72,7 @@ const TodosList = ({ token }) => {
                         {!todo.completed &&
                         <Link 
                             to={`/todos/${todo.id}`} 
-                            state={{ currentTodo: todo }} // 使用 `state` 传递数据
+                            state={{ currentTodo: todo }} // 使用 ` location.state` 传递数据到跳转的页面 这里送到了/todos/${todo.id}
                         >
                             <Button variant="outline-info" className="me-2">
                                 Edit
