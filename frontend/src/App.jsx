@@ -7,6 +7,8 @@ import AddTodo from './components/add-todo';
 import TodosList from './components/todos-list';
 import Login from './components/login';
 import Signup from './components/signup';
+import RoomCreate from './components/roomcreate';
+import RoomJoin from './components/roomjoin';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
@@ -17,6 +19,7 @@ import { Link } from 'react-router-dom';
 import { BrowserRouter, Routes, Route,Router } from 'react-router-dom'; 
 
 import TodoDataService from './services/todos';
+import HomeRoom from './components/homeroom';
 
 function App() {
   //useState is a React Hook that lets you add a state variable to your component.
@@ -72,6 +75,7 @@ function App() {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
                 <Link className="nav-link" to={"/todos"}>Todos</Link>
+                <Link className="nav-link" to={"/homeroom"}>MusicRoom</Link>
                 {user ? (
                   <Link className="nav-link" to={"/logout"}  onClick={logout}>Logout ({user})</Link>
                 ) : (
@@ -94,6 +98,9 @@ function App() {
             <Route path="/todos/:id" element={<AddTodo token={token} />} />
             <Route path="/login" element={<Login login={login} />} />
             <Route path="/signup" element={<Signup signup={signup} />} />
+            <Route path="/homeroom" element={<HomeRoom token={token} />} />
+            <Route path="/roomcrete" element={<RoomCreate token={token} />} />
+            <Route path="/roomjoin" element={<RoomJoin token={token} />} />
         </Routes>
         </div>
 
