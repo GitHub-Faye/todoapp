@@ -99,7 +99,7 @@ function App() {
             <Route path="/login" element={<Login login={login} />} />
             <Route path="/signup" element={<Signup signup={signup} />} />
             <Route path="/homeroom" element={<HomeRoom token={token} />} />
-            <Route path="/roomcrete" element={<RoomCreate token={token} />} />
+            <Route path="/roomcreate" element={<RoomCreate token={token} />} />
             <Route path="/roomjoin" element={<RoomJoin token={token} />} />
         </Routes>
         </div>
