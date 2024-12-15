@@ -11,4 +11,5 @@ urlpatterns = [
     path('login/', views.login),
 
     path('room', views.RoomView.as_view()),
+    path('room-create', views.RoomCreateView.as_view()),
 ]
