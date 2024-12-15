@@ -18,6 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.db import IntegrityError
 
+
 from django.contrib.auth import authenticate
 
 class TodoListView(generics.ListAPIView):
@@ -72,8 +73,10 @@ class RoomView(generics.ListAPIView):
 
 class RoomCreateView(APIView):
     serializer_class = CreateRoomSerializer
-
+    permission_classes = [permissions.AllowAny]
     def post(self, request, format=None):
+        if not self.request.session.session_key:
+            self.request.session.create()  # Initializes a session if it doesn't exist
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             guest_can_pause = serializer.data.get('guest_can_pause')

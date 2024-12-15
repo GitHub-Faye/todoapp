@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+
+import TodoDataService from "../services/todos";
+
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -23,7 +26,18 @@ const RoomCreate = (props) => {
   const handleGuestCanPauseChange = (event) => {
     setGuestCanPause(event.target.value);
   };
-
+  const handleRoomButtonPressed= (event) => {
+    var data = {
+        guest_can_pause : guestCanPause,
+        votes_to_skip : defaultVotes,
+        };
+    TodoDataService.createRoom(data, props.token).then((response) => {
+        console.log("Server response:", response.data || response); // Handle Axios or fetch
+      })
+      .catch((e) => {
+        console.error("Error saving:", e);
+      });
+  };
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} align="center">
@@ -81,6 +95,7 @@ const RoomCreate = (props) => {
         <Button
           color="primary"
           variant="contained"
+          onClick={handleRoomButtonPressed}
         >
           Create A Room
         </Button>

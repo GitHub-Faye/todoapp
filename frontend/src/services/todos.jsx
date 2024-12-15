@@ -26,5 +26,12 @@ class TodoDataService{
     signup(data){
         return axios.post("https://ldb123.pythonanywhere.com/api/signup/", data);
     }
+
+
+    createRoom(data){
+        return axios.post("http://localhost:8000/api/room-create", data,{
+            withCredentials: true, // 确保请求携带凭据（如 cookies）
+        });
+    }
 }
 export default new TodoDataService();
