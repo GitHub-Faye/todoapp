@@ -73,28 +73,34 @@ class RoomView(generics.ListAPIView):
 
 class RoomCreateView(APIView):
     serializer_class = CreateRoomSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]  # 需要登录认证
+
     def post(self, request, format=None):
-        if not self.request.session.session_key:
-            self.request.session.create()  # Initializes a session if it doesn't exist
+        # 使用序列化器验证请求数据
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            guest_can_pause = serializer.data.get('guest_can_pause')
-            votes_to_skip = serializer.data.get('votes_to_skip')
-            host = self.request.session.session_key
+            guest_can_pause = serializer.validated_data.get('guest_can_pause')
+            votes_to_skip = serializer.validated_data.get('votes_to_skip')
+            
+            # 使用 Token 获取已认证用户
+            host = request.auth
+            
+            # 查找用户是否已经创建过 Room
             queryset = Room.objects.filter(host=host)
             if queryset.exists():
-                room = queryset[0]
+                # 如果房间存在，更新房间信息
+                room = queryset.first()
                 room.guest_can_pause = guest_can_pause
                 room.votes_to_skip = votes_to_skip
                 room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
                 return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
             else:
-                room = Room(host=host, guest_can_pause=guest_can_pause,
-                            votes_to_skip=votes_to_skip)
+                # 如果房间不存在，为用户创建新的房间
+                room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
                 room.save()
                 return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
 
+        # 数据验证失败
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 
 @csrf_exempt

@@ -9,6 +9,7 @@ import Login from './components/login';
 import Signup from './components/signup';
 import RoomCreate from './components/roomcreate';
 import RoomJoin from './components/roomjoin';
+import Room from './components/roomjoin';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
@@ -76,6 +77,7 @@ function App() {
               <Nav className="me-auto">
                 <Link className="nav-link" to={"/todos"}>Todos</Link>
                 <Link className="nav-link" to={"/homeroom"}>MusicRoom</Link>
+                <Link className="nav-link" to={"/roomcreate"}>RoomCreate</Link>
                 {user ? (
                   <Link className="nav-link" to={"/logout"}  onClick={logout}>Logout ({user})</Link>
                 ) : (
@@ -101,6 +103,7 @@ function App() {
             <Route path="/homeroom" element={<HomeRoom token={token} />} />
             <Route path="/roomcreate" element={<RoomCreate token={token} />} />
             <Route path="/roomjoin" element={<RoomJoin token={token} />} />
+            <Route path="/room/:roomCode" element={<Room token={token} />} />
         </Routes>
         </div>
 
