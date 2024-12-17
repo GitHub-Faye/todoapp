@@ -20,7 +20,7 @@ const RoomCreate = (props) => {
   const handleGuestCanPauseChange = (event) => {
     setGuestCanPause(event.target.value);
   };
-  const handleRoomButtonPressed= (event) => {
+  const handleRoomButtonPressed= async (event) => {
     var data = {
         guest_can_pause : guestCanPause,
         votes_to_skip : defaultVotes,

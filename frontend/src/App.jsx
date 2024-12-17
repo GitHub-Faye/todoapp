@@ -30,12 +30,15 @@
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [error, setError] = useState('');
+    const [roomCode, setRoomCode] = useState('');
 
     useEffect(() => {
       const storedToken = localStorage.getItem('token');
       const storedUser = localStorage.getItem('user');
+      const storedCode = localStorage.getItem('room_code');
       if (storedToken) setToken(storedToken);
       if (storedUser) setUser(storedUser);
+      if (storedCode) setRoomCode(storedCode);
     }, []);
 
 
@@ -84,8 +87,7 @@
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
                   <Link className="nav-link" to={"/todos"}>Todos</Link>
-                  <Link className="nav-link" to={"/homeroom"}>MusicRoom</Link>
-                  <Link className="nav-link" to={"/roomcreate"}>RoomCreate</Link>
+                  <Link className="nav-link" to={roomCode?'/room/'+roomCode :"/homeroom"}>MusicRoom</Link>
                   {user ? (
                     <Link className="nav-link" to={"/logout"}  onClick={logout}>Logout ({user})</Link>
                   ) : (
