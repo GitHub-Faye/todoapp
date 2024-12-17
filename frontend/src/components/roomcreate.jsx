@@ -1,22 +1,16 @@
 import React, { useState,useEffect } from "react";
 
 import TodoDataService from "../services/todos";
+import { Link,useNavigate } from 'react-router-dom';
 
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import { Link } from 'react-router-dom';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import {Button,Grid,Typography,TextField,FormHelperText,FormControl,
+  Radio,RadioGroup,FormControlLabel} from '@mui/material'
+
 
 const RoomCreate = (props) => {
   const [defaultVotes, setDefaultVotes] = useState(1);
   const [guestCanPause, setGuestCanPause] = useState("true");
-
+  const navigate = useNavigate();
   // Handle votes change
   const handleVotesChange = (event) => {
     setDefaultVotes(event.target.value);
@@ -33,10 +27,13 @@ const RoomCreate = (props) => {
         };
     TodoDataService.createRoom(data, props.token).then((response) => {
         console.log("Server response:", response.data || response); // Handle Axios or fetch
+        navigate('/room/'+response.data.code);
       })
       .catch((e) => {
         console.error("Error saving:", e);
       });
+
+      
   };
   return (
     <Grid container spacing={1}>

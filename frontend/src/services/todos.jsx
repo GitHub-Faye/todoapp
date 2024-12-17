@@ -2,7 +2,7 @@ import axios from 'axios';
 class TodoDataService{
     getAll(token){
     axios.defaults.headers.common["Authorization"] = "Token " + token;
-    return axios.get('http://localhost:8000/api/todos/');[DCB7]
+    return axios.get('http://localhost:8000/api/todos/');
     }
     createTodo(data, token){
     axios.defaults.headers.common["Authorization"] = "Token " + token;
@@ -31,6 +31,13 @@ class TodoDataService{
     createRoom(data, token){
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.post("http://localhost:8000/api/room-create", data,);
+    }
+
+    getRoom(data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.get("http://localhost:8000/api/get-room",{
+            params: data,
+        },);
     }
 }
 export default new TodoDataService();
