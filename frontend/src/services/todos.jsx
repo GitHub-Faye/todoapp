@@ -46,6 +46,11 @@ class TodoDataService{
         return axios.post("http://localhost:8000/api/join-room", data,);
     }
 
+    leaveRoom(data, token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.post("http://localhost:8000/api/leave-room", data,);
+    }
+
 }
 export default new TodoDataService();
 

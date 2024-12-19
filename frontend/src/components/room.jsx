@@ -53,6 +53,7 @@ const Room = (props) => {
   const leaveButtonPressed = ()=>{
     localStorage.removeItem('room_code');
     props.set_room_code(null);
+    TodoDataService.leaveRoom(null,token);
     navigate('/homeroom');
   };
 
