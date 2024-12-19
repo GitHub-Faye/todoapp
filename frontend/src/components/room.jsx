@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from "react-router-dom";
 import TodoDataService from "../services/todos";
+
+import { Grid, Button, ButtonGroup, Typography } from '@mui/material';
 
 const Room = (props) => {
   const [room, setRoom] = useState();
   const { roomCode } = useParams();
   const [token, setToken] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
@@ -35,6 +38,7 @@ const Room = (props) => {
       if(token!=null){
         const response = await TodoDataService.getRoom({code:roomCode}, token); // 使用 async/await
         setRoom(response.data);
+        
       }else{
         alert("没有token");
       }
@@ -46,15 +50,53 @@ const Room = (props) => {
   };
 
 
+  const leaveButtonPressed = ()=>{
+    localStorage.removeItem('room_code');
+    props.set_room_code(null);
+    navigate('/homeroom');
+  };
+
   return (
     <div>
       {room ? (
-        <>
-          <h3>{room.code}</h3>
-          <p>Votes: {room.votes_to_skip}</p>
-          <p>Guest Can Pause:  {room.guest_can_pause ? 'Yes' : 'No'}</p>
-          <p>Host: {room.is_host ? 'Yes' : 'No'}</p>
-        </>
+
+        <Grid container spacing={1}>
+        <Grid item xs={12} align="center">
+          <Typography variant="h4" component="h4">
+            Code: {room.code}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Typography variant="h6" component="h6">
+            Votes: {room.votes_to_skip}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Typography variant="h6" component="h6">
+            Guest Can Pause: {room.guest_can_pause ? 'Yes' : 'No'}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Typography variant="h6" component="h6">
+            Host: {room.is_host ? 'Yes' : 'No'}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={leaveButtonPressed}
+          >
+            Leave Room
+          </Button>
+        </Grid>
+        </Grid>
+        // <>
+        //   <h3>{room.code}</h3>
+        //   <p>Votes: {room.votes_to_skip}</p>
+        //   <p>Guest Can Pause:  {room.guest_can_pause ? 'Yes' : 'No'}</p>
+        //   <p>Host: {room.is_host ? 'Yes' : 'No'}</p>
+        // </>
       ) : (
         <p>Loading room details...</p>
       )}

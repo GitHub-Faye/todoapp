@@ -27,6 +27,8 @@ const RoomCreate = (props) => {
         };
     TodoDataService.createRoom(data, props.token).then((response) => {
         console.log("Server response:", response.data || response); // Handle Axios or fetch
+        localStorage.setItem('room_code', response.data.code);
+        props.set_room_code(response.data.code);  
         navigate('/room/'+response.data.code);
       })
       .catch((e) => {

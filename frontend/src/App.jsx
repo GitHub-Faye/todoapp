@@ -38,9 +38,13 @@
       const storedCode = localStorage.getItem('room_code');
       if (storedToken) setToken(storedToken);
       if (storedUser) setUser(storedUser);
-      if (storedCode) setRoomCode(storedCode);
+      if (storedCode) {setRoomCode(storedCode)}else{setRoomCode(storedCode)};
     }, []);
 
+      // 用于更新状态的回调函数
+  const set_room_code = (code) => {
+    setRoomCode(code); // 更新父组件的状态
+  };
 
     // login, signup 和 logout 函数定义
     async function login(user = null) { // 默认参数 user 为 null
@@ -110,10 +114,10 @@
               <Route path="/todos/:id" element={<AddTodo token={token} />} />
               <Route path="/login" element={<Login login={login} />} />
               <Route path="/signup" element={<Signup signup={signup} />} />
-              <Route path="/homeroom" element={<HomeRoom token={token} />} />
-              <Route path="/roomcreate" element={<RoomCreate token={token} />} />
-              <Route path="/roomjoin" element={<RoomJoin token={token} />} />
-              <Route path="/room/:roomCode" element={<Room token={token} />} />
+              <Route path="/homeroom" element={<HomeRoom token={token} set_room_code={set_room_code}  />} />
+              <Route path="/roomcreate" element={<RoomCreate token={token} set_room_code={set_room_code} />} />
+              <Route path="/roomjoin" element={<RoomJoin token={token} set_room_code={set_room_code} />} />
+              <Route path="/room/:roomCode" element={<Room token={token} set_room_code={set_room_code} />} />
           </Routes>
           </div>
 
