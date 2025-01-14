@@ -19,6 +19,10 @@ class TodoCompletedSerializer(serializers.ModelSerializer):
         fields = ["id"]
         read_only_fields = ['title', 'detail', 'completed', 'create_time', 'update_time']
 
+
+
+
+
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
@@ -30,3 +34,11 @@ class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = ('guest_can_pause', 'votes_to_skip')
+
+
+class UpdateRoomSerializer(serializers.ModelSerializer):
+    code = serializers.CharField(validators=[])
+
+    class Meta:
+        model = Room
+        fields = ('guest_can_pause', 'votes_to_skip', 'code')

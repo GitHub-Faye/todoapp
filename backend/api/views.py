@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import RoomSerializer,CreateRoomSerializer, TodoCompletedSerializer, TodoSerializer
+from .serializers import RoomSerializer,CreateRoomSerializer, TodoCompletedSerializer, TodoSerializer, UpdateRoomSerializer
 
 from todo.models import Todo
 from music_controller.models import Room
@@ -80,7 +80,10 @@ class GetRoom(APIView):
             room = Room.objects.filter(code=code)
             if len(room) > 0:
                 data = RoomSerializer(room[0]).data
-                data['is_host'] = request.auth == room[0].host
+                # print(request.auth)
+                # print(room[0].host)
+                data['is_host'] = str(request.auth) == str(room[0].host)
+                # print(data['is_host'])
                 return Response(data, status=status.HTTP_200_OK)
             return Response({'Room Not Found': 'Invalid Room Code.'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -140,6 +143,35 @@ class RoomCreateView(APIView):
 
         # 数据验证失败
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class UpdateRoom(APIView):
+    serializer_class = UpdateRoomSerializer
+
+    def patch(self, request, format=None):
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            guest_can_pause = serializer.data.get('guest_can_pause')
+            votes_to_skip = serializer.data.get('votes_to_skip')
+            code = serializer.data.get('code')
+
+            queryset = Room.objects.filter(code=code)
+            if not queryset.exists():
+                return Response({'msg': 'Room not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+            room = queryset[0]
+            user_id = request.auth
+            if str(room.host) != str(user_id):
+                return Response({'msg': 'You are not the host of this room.'}, status=status.HTTP_403_FORBIDDEN)
+
+            room.guest_can_pause = guest_can_pause
+            room.votes_to_skip = votes_to_skip
+            room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+            return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+
+        return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
 
 @csrf_exempt
 def signup(request):

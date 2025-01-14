@@ -50,7 +50,10 @@ class TodoDataService{
         axios.defaults.headers.common["Authorization"] = "Token " + token;
         return axios.post("http://localhost:8000/api/leave-room", data,);
     }
-
+    upDateRoom(data,token){
+        axios.defaults.headers.common["Authorization"] = "Token " + token;
+        return axios.patch("http://localhost:8000/api/update-room", data,);
+    }
 }
 export default new TodoDataService();
 

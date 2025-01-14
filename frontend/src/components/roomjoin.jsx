@@ -13,12 +13,10 @@ const RoomJoin = (props) => {
     };
     const roomButtonPressed = (e) => {
         TodoDataService.joinRoom({code:roomCode},props.token).then((response) => {
-   
                 console.log("Server response:", response.data || response); // Handle Axios or fetch
                 localStorage.setItem('room_code', roomCode);
                 props.set_room_code(roomCode); 
                 navigate('/room/'+roomCode);
- 
         })
           .catch((e) => {
             setError("Room not found.");

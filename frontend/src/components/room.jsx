@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams,useNavigate } from "react-router-dom";
 import TodoDataService from "../services/todos";
+import RoomCreate from "./roomcreate"
 
 import { Grid, Button, ButtonGroup, Typography } from '@mui/material';
 
@@ -8,7 +9,11 @@ const Room = (props) => {
   const [room, setRoom] = useState();
   const { roomCode } = useParams();
   const [token, setToken] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
   const navigate = useNavigate();
+
+
+
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
@@ -23,6 +28,9 @@ const Room = (props) => {
       getRoomDetails(); // Call getRoomDetails when token is available
     }
   }, [token]); // This effect runs when `token` changes
+
+
+
 
 
     // 在 roomCode 变化时重新调用 getRoomDetails
@@ -56,8 +64,49 @@ const Room = (props) => {
     TodoDataService.leaveRoom(null,token);
     navigate('/homeroom');
   };
+  const renderSettingsButton= ()=> {
+    return (
+      <Grid item xs={12} align="center">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() =>setShowSettings(true)}
+        >
+          Settings
+        </Button>
+      </Grid>
+    );
+  };
 
+
+  const renderSettings= ()=> {
+    return (
+      <Grid container spacing={1}>
+        <Grid item xs={12} align="center">
+          <RoomCreate
+            update={true}
+            votesToSkip={room.votes_to_skip}
+            guestCanPause={room.guest_can_pause}
+            roomCode={room.code}
+            updateCallback={getRoomDetails}
+            token = {token}
+            set_room_code={props.set_room_code}
+          />
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setShowSettings(false)}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  }
   return (
+    showSettings?renderSettings():
     <div>
       {room ? (
 
@@ -82,6 +131,7 @@ const Room = (props) => {
             Host: {room.is_host ? 'Yes' : 'No'}
           </Typography>
         </Grid>
+        {room.is_host?renderSettingsButton():null}
         <Grid item xs={12} align="center">
           <Button
             variant="contained"
